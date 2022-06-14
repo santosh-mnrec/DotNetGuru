@@ -8,7 +8,7 @@ on:
 
 jobs:
   deploy-to-github-pages:
-  # Use Ubuntu-latest image to run steps on 2
+  # Use Ubuntu-latest image to run steps on
     runs-on: ubuntu-latest
     steps:
     # Uses GitHub’s checkout action to check out code from the master branch
