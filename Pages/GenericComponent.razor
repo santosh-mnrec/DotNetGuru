@@ -1,0 +1,22 @@
+
+@typeparam T  
+@foreach (var item in Items)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Card Title</h5>
+
+            <p>@ItemTemplate(item)</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+
+    public List<T> Items { get; set; }
+    [Parameter]
+    public RenderFragment<T> ItemTemplate { get; set; }
+
+}

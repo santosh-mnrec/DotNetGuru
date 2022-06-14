@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@using DotNetGuru.Pages
+@using Events;
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </div>
+
+                <div class="col-md-6">
+                   <UserComponent></UserComponent>
+                </div>
+
+
+            </div>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+
+    </main>
+
+</div>
+@code {
+
+
+   
+}

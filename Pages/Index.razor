@@ -1,0 +1,19 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Dotnet Guru All Samples</h1>
+<p style="color:red">@name</p>
+@code{
+    string name;
+    protected override void OnInitialized()
+    {
+        OnUserChanged += (o, e) =>
+        {
+            name = e.Name;
+            StateHasChanged();
+        };
+        UnSubscribe();
+       
+    }
+}

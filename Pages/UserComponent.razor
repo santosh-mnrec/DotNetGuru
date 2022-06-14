@@ -1,0 +1,26 @@
+﻿
+<select @onchange="(arg)=>ChangeUser(arg)">
+    @foreach (var user in Users)
+    {
+    <option>@user</option>
+    }
+</select>
+
+@code {
+    private List<string> Users = new List<string>();
+    private string name;
+    private void ChangeUser(ChangeEventArgs username)
+    {
+        UserChanged(username.Value.ToString());
+        StateHasChanged();
+        UnSubscribe();
+
+    }
+    protected override void OnInitialized()
+    {
+
+        Users.Add("John");
+        Users.Add("Bill");
+        Users.Add("Santosh");
+    }
+}

@@ -1,0 +1,42 @@
+name: Deploy to GitHub pages
+
+# Run workflow on every push to the master branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-to-github-pages:
+  # Use Ubuntu-latest image to run steps on 2
+    runs-on: ubuntu-latest
+    steps:
+    # Uses GitHub’s checkout action to check out code from the master branch
+    - uses: actions/checkout@v3
+    # Sets up .NET Core SDK 3.1
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+
+    # Publishes the Blazor project to the release folder
+    - name: Publish .NET Core Project
+      run: dotnet publish DotNetGuru.csproj -c Release -o release 
+
+    - name: Change Base Url santosh
+      run: sed -i 's/<base href="\/" \/>/<base href="\/DotNetGuru\/" \/>/g' release/wwwroot/index.html
+
+    # Copy index.html to 404.html to serve the same file when a file is not found
+    - name: copy index.html to 404.html
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+    - name:  Add the .nojekyll file to tell GitHub 
+      run: touch release/wwwroot/.nojekyll
+
+    - name: Commit wwwroot to GitHub pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: release/wwwroot

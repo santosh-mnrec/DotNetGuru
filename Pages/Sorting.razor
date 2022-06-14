@@ -1,0 +1,79 @@
+@page "/sorting"
+@using DotNetGuru.Models
+<div class="container">
+    <div class="d-flex flex-row">
+        @for (int i = 0; i < @Items.Length; i++)
+        {
+
+            @if(Items[i].IsSorted==false){
+            <div class="@Items[i].CssClass"  style="height:@(Items[i].Value*20)px;width:10px">@Items[i].Value</div>
+            }else{
+                 <div class="alert alert-warning col-md-2"  style="height:@(Items[i].Value*20)px;width:10px">@Items[i].Value</div>
+            }
+
+        }
+    </div>
+    <div class="row">
+      
+        <div class="col-md-4 alert alert-success">@compareText</div>
+        @if (swapped)
+        {
+            <div class="alert alert-success col-md-4">@swapText</div>
+        }else{
+            <div class="alert alert-success col-md-4">No Swap</div>
+        }
+    </div>
+</div>
+@code{
+
+        private string swapText = "";
+        private string compareText = "";
+        private Item[]? Items { get;set;}
+        private Random rand = new Random();
+        private bool swapped = false;
+        protected override void OnInitialized()
+        {
+            Items = Enumerable.Range(1, 10).Select((v, i) => new Item()
+            {
+
+                Value = rand.Next(1, 10)
+
+            }).ToArray();
+
+            Sort();
+        }
+
+
+        private async Task Sort()
+        {
+
+            for (int j = 0; j < Items.Length; j++)
+            {
+
+                for (int i = 0; i < Items.Length - 1; i++)
+                {
+
+                    Items.UpdateClass(i, "alert alert-danger col-md-2");
+                    Items.UpdateClass(i + 1, "alert alert-success col-md-2");
+                    await Task.Delay(200);
+                    compareText = $"compareing  {Items[i + 1].Value} and {Items[i].Value} ";
+                    if (Items[i].Value > Items[i + 1].Value)
+                    {
+
+                        swapText = $"Swapping   {Items[i + 1].Value} and {Items[i].Value}";
+                        (Items[i].Value, Items[i + 1].Value) = (Items[i + 1].Value, Items[i].Value);
+                        swapped = true;
+                        StateHasChanged();
+                        swapText = "";
+                    }
+                    compareText = "";
+                    swapped = false;
+                    Items.UpdateClass(i, "alert alert-dark col-md-2");
+                    Items.UpdateClass(i + 1, "alert alert-dark col-md-2");
+                }
+                Items[Items.Length - j - 1].IsSorted = true;
+                StateHasChanged();
+            }
+
+        }
+}

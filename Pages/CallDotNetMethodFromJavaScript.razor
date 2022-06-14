@@ -1,0 +1,16 @@
+@page "/dotnet"
+ <button onclick="callDotNetMethod()">
+        Trigger .NET static method
+    </button>
+
+@code{
+
+
+    [JSInvokable]
+    public static async Task<string> DotnetMethod(string name){
+            await Task.Delay(100);
+            return $"Hello {name}";
+
+    }
+    
+}
