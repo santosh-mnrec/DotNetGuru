@@ -3,24 +3,24 @@
 
 <div class="progress">
     <div class="progress-bar bg-success"
-         role="progressbar" style="width: @(p)%" aria-valuenow="@p" aria-valuemin="0" aria-valuemax="100"></div>
+         role="progressbar" style="width: @(progressValue)%" aria-valuenow="@progressValue" aria-valuemin="0" aria-valuemax="100"></div>
 </div>
 
 @code {
 
-    int count = 0;
-    int p = 0;
+    int eventCount = 0;
+    int progressValue = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        var x1 = new Progress<int>(x =>
+        var progress = new Progress<int>(x =>
         {
-            p = x;
+            progressValue = x;
 
             StateHasChanged();
 
         });
-        await GetPosts(new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 5, 6, 1, 12, 23, 2, 23, 23, 22 }, x1);
+        await GetPosts(new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 5, 6, 1, 12, 23, 2, 23, 23, 22 }, progress);
 
     }
     public async Task GetPosts(List<int> ids, IProgress<int> progress = null)
@@ -31,22 +31,22 @@
         tasks = ids.Select(async x =>
         {
 
-            var re = await client.GetAsync("https://jsonplaceholder.typicode.com/todos/" + x);
+            var todoTask = await client.GetAsync("https://jsonplaceholder.typicode.com/todos/" + x);
             await Task.Delay(5000);
             if (progress != null)
             {
-                count++;
-                var percentage = (double)count / tasks.Count();
+                eventCount++;
+                var percentage = (double)eventCount / tasks.Count();
                 var p = percentage * 100;
                 var pint = (int)Math.Round(p, 0);
                 progress.Report(pint);
             }
 
-            return re;
+            return todoTask;
         }
         ).ToList();
-        var res = await Task.WhenAll(tasks);
-        foreach (var element in res)
+        var allResult = await Task.WhenAll(tasks);
+        foreach (var element in allResult)
         {
             var content = await element.Content.ReadAsStringAsync();
             Console.WriteLine(content);
