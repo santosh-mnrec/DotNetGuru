@@ -1,0 +1,14 @@
+@page "/event"
+
+<textarea @ondotnetguruevent="HandlePasteEvent"/>
+
+@code{
+
+    public void HandlePasteEvent(DotNetGuruEventArgs e)
+    {
+        Console.WriteLine(e);
+    }
+
+
+
+}

@@ -20,14 +20,22 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script src="css/customEvent.js"></script>
     <script>
+        console.log(Blazor);
+       
         window.callDotNetMethod = () => {
-          DotNet.invokeMethodAsync('DotNetGuru', 'DotnetMethod',"Dotnet Guru")
-            .then(data => {
-             alert(data);
-            });
-          };
-      </script>
+            DotNet.invokeMethodAsync('DotNetGuru', 'DotnetMethod', "Dotnet Guru")
+                .then(data => {
+                    alert(data);
+                });
+        };
+        window.focusElement = (element) => {
+            var elementToFocus=document.getElementById(element);
+            elementToFocus.focus();
+        }
+      
+    </script>
 </body>
 
 </html>

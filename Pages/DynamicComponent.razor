@@ -1,0 +1,51 @@
+﻿@page "/dynamic"
+@using DotNetGuru.Pages.Components
+@using System.Reflection
+
+<h1>DotNet Guru</h1>
+<select @onchange="LoadComponent">
+    
+
+    @foreach (var c in new[] {"Select Component", "ComOne", "ComTwo" })
+    {
+        <option>@c</option>
+    }
+</select>
+<h6>Component Will Be Loaded Here</h6>
+@RenderFragment
+
+@code {
+    private RenderFragment RenderFragment;
+
+    private readonly List<ComponentBase> componentList = new List<ComponentBase> { new ComOne(), new ComTwo() };
+
+
+    protected override void OnInitialized()
+    {
+    }
+
+
+    public void LoadComponent(ChangeEventArgs e)
+    {
+        Console.WriteLine(e.Value);
+
+        RenderFragment = builder =>
+        {
+            var currentComponent = FilterByType(typeof(ComponentBase), e.Value.ToString());
+            if (currentComponent != null)
+            {
+                builder.OpenComponent(0, currentComponent);
+                builder.CloseComponent();
+            }
+        };
+        StateHasChanged();
+    }
+    public Type FilterByType(Type BaseType,string name)
+    {
+
+        return Assembly.GetExecutingAssembly().GetTypes()
+            .FirstOrDefault(t => BaseType.IsAssignableFrom(t) && t.Name == name);
+        ;
+    }
+
+}

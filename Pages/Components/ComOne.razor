@@ -1,0 +1,12 @@
+﻿<h1>Com1</h1>
+<p>@count</p>
+<button @onclick="Increment">Increment</button>
+@code{
+
+    private int count=0;
+    private void Increment(){
+        count++;
+        StateHasChanged();
+
+    }
+}
